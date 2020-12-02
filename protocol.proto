@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.protocol";
+option java_outer_classname = "ProtocolProto";
+option objc_class_prefix = "HLW";
+
+package protocol;
+// The greeting service definition.
+service Greeter {
+  rpc Benchmark (BenchmarkInfo) returns (Result) {}
+}
+message Measurement {
+    string unit = 1;
+    double value = 2;
+}
+message MeasurementTable {
+    map<string, Measurement> measurementTable = 1;
+}
+message Result {
+  map<string, MeasurementTable> result = 1;
+}
+message BenchmarkInfo {
+  string libURL = 1;
+  repeated string modelURLs = 2;
+}
