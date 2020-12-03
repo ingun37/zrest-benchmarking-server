@@ -48,8 +48,10 @@ class GRPCServer implements proto.IGreeterServer {
       y({ name: "cannot parse url", message: x.request.getLiburl() }, null);
       throw error;
     }
-
-    benchmark(libURL, zrestURLs).then((result) => y(null, encodeResult(result)));
+    console.log(libURL, zrestURLs)
+    benchmark(libURL, zrestURLs)
+      .then((result) => y(null, encodeResult(result)))
+      .catch((err)=>{y(err, null)})
   };
 }
 

@@ -25,7 +25,6 @@ afterAll(()=>{
     server.kill();
 })
 
-const sampleLib = "https://viewer-library.s3.ap-northeast-2.amazonaws.com/closet.viewer.js";
 
 const sampleZrests = [
     "https://zrest-free-sample.s3.ap-northeast-2.amazonaws.com/7438d-o.dudu8u.zrest",
@@ -33,6 +32,7 @@ const sampleZrests = [
     "https://zrest-free-sample.s3.ap-northeast-2.amazonaws.com/oos-chichuci-cuu.zrest",
 ]
 test("test", (done) => {
+    const sampleLib = "https://viewer-library.s3.ap-northeast-2.amazonaws.com/closet.viewer.js";
     const x = new BenchmarkInfo();
     x.setLiburl(sampleLib);
     x.setModelurlsList(sampleZrests);
@@ -52,6 +52,19 @@ test("test", (done) => {
             console.log(rsp.getResultMap())
             expect(true).toBeTruthy();
         }
+        done();
+    })
+}, 1000 * 60)
+
+
+test("test2", (done) => {
+    const badLib = "https://viewer-library.s3.ap-northeast-2.amazonaws.com/bad.closet.viewer.js";
+    const x = new BenchmarkInfo();
+    x.setLiburl(badLib);
+    x.setModelurlsList(sampleZrests);
+    client.benchmark(x, (err,rsp)=>{
+        console.log({err,rsp});
+        expect(err).toBeTruthy();
         done();
     })
 }, 1000 * 60)

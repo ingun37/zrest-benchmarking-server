@@ -66,7 +66,10 @@ class GRPCServer {
                 y({ name: "cannot parse url", message: x.request.getLiburl() }, null);
                 throw error;
             }
-            zrest_benchmarker_1.benchmark(libURL, zrestURLs).then((result) => y(null, encodeResult(result)));
+            console.log(libURL, zrestURLs);
+            zrest_benchmarker_1.benchmark(libURL, zrestURLs)
+                .then((result) => y(null, encodeResult(result)))
+                .catch((err) => { y(err, null); });
         };
     }
 }
