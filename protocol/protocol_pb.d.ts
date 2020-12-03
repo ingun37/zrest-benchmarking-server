@@ -6,6 +6,23 @@
 
 import * as jspb from "google-protobuf";
 
+export class Void extends jspb.Message { 
+
+    serializeBinary(): Uint8Array;
+    toObject(includeInstance?: boolean): Void.AsObject;
+    static toObject(includeInstance: boolean, msg: Void): Void.AsObject;
+    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+    static serializeBinaryToWriter(message: Void, writer: jspb.BinaryWriter): void;
+    static deserializeBinary(bytes: Uint8Array): Void;
+    static deserializeBinaryFromReader(message: Void, reader: jspb.BinaryReader): Void;
+}
+
+export namespace Void {
+    export type AsObject = {
+    }
+}
+
 export class Measurement extends jspb.Message { 
     getUnit(): string;
     setUnit(value: string): Measurement;
@@ -51,29 +68,6 @@ export namespace MeasurementTable {
     export type AsObject = {
 
         measurementtableMap: Array<[string, Measurement.AsObject]>,
-    }
-}
-
-export class Result extends jspb.Message { 
-
-    getResultMap(): jspb.Map<string, MeasurementTable>;
-    clearResultMap(): void;
-
-
-    serializeBinary(): Uint8Array;
-    toObject(includeInstance?: boolean): Result.AsObject;
-    static toObject(includeInstance: boolean, msg: Result): Result.AsObject;
-    static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
-    static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-    static serializeBinaryToWriter(message: Result, writer: jspb.BinaryWriter): void;
-    static deserializeBinary(bytes: Uint8Array): Result;
-    static deserializeBinaryFromReader(message: Result, reader: jspb.BinaryReader): Result;
-}
-
-export namespace Result {
-    export type AsObject = {
-
-        resultMap: Array<[string, MeasurementTable.AsObject]>,
     }
 }
 

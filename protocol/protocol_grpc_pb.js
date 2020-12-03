@@ -15,15 +15,15 @@ function deserialize_protocol_BenchmarkInfo(buffer_arg) {
   return protocol_pb.BenchmarkInfo.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
-function serialize_protocol_Result(arg) {
-  if (!(arg instanceof protocol_pb.Result)) {
-    throw new Error('Expected argument of type protocol.Result');
+function serialize_protocol_Void(arg) {
+  if (!(arg instanceof protocol_pb.Void)) {
+    throw new Error('Expected argument of type protocol.Void');
   }
   return Buffer.from(arg.serializeBinary());
 }
 
-function deserialize_protocol_Result(buffer_arg) {
-  return protocol_pb.Result.deserializeBinary(new Uint8Array(buffer_arg));
+function deserialize_protocol_Void(buffer_arg) {
+  return protocol_pb.Void.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 
@@ -34,11 +34,11 @@ var GreeterService = exports.GreeterService = {
     requestStream: false,
     responseStream: false,
     requestType: protocol_pb.BenchmarkInfo,
-    responseType: protocol_pb.Result,
+    responseType: protocol_pb.Void,
     requestSerialize: serialize_protocol_BenchmarkInfo,
     requestDeserialize: deserialize_protocol_BenchmarkInfo,
-    responseSerialize: serialize_protocol_Result,
-    responseDeserialize: deserialize_protocol_Result,
+    responseSerialize: serialize_protocol_Void,
+    responseDeserialize: deserialize_protocol_Void,
   },
 };
 
