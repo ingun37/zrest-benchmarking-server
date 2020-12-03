@@ -1,6 +1,6 @@
 import * as grpc from "grpc";
-import * as proto from "./protocol/protocol_grpc_pb";
-import * as pb from "./protocol/protocol_pb";
+import * as proto from "../protocol/protocol_grpc_pb";
+import * as pb from "../protocol/protocol_pb";
 import * as R from "fp-ts/Record";
 import { pipe } from "fp-ts/lib/function";
 import { Measurement, Result, benchmark } from "zrest-benchmarker";

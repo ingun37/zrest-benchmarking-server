@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node
+#!/usr/bin/env node
 
 import { startServer } from "./lib";
 startServer();

@@ -1,13 +1,15 @@
 import * as grpc from "grpc";
 import { spawn, ChildProcess } from "child_process";
-import { GreeterClient } from "./protocol/protocol_grpc_pb";
-import { BenchmarkInfo } from "./protocol/protocol_pb";
+import { GreeterClient } from "../protocol/protocol_grpc_pb";
+import { BenchmarkInfo } from "../protocol/protocol_pb";
 import { cons } from "fp-ts/lib/ReadonlyArray";
+import {resolve} from "path";
 var server:ChildProcess;
 var client = new GreeterClient("localhost:50051", grpc.credentials.createInsecure());
 
+const binPath = resolve(__dirname, "bin.ts");
 beforeAll((done)=>{
-    server = spawn("./index.ts", {
+    server = spawn("npx", ["ts-node", binPath], {
         detached: true
     });
     server.stdout?.on("data", (chunk)=>{
