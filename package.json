@@ -1,8 +1,12 @@
 {
   "name": "zrest-benchmarking-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "zrest benchmarking server",
   "main": "index.js",
+  "bin": {
+    "zrest-benchmarking-server": "./dist/zrest-benchmarking-server.js"
+  },
+  "preferGlobal": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

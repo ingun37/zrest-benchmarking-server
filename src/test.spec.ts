@@ -7,7 +7,7 @@ import {resolve} from "path";
 var server:ChildProcess;
 var client = new GreeterClient("localhost:50051", grpc.credentials.createInsecure());
 
-const binPath = resolve(__dirname, "bin.ts");
+const binPath = resolve(__dirname, "zrest-benchmarking-server.ts");
 beforeAll((done)=>{
     server = spawn("npx", ["ts-node", binPath], {
         detached: true
