@@ -1,6 +1,6 @@
 {
   "name": "zrest-benchmarking-server",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "zrest benchmarking server",
   "main": "index.js",
   "bin": {

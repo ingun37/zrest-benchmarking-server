@@ -21,8 +21,17 @@ function encodeMeasurementTable(table: Record<string, Measurement>): pb.Measurem
     })
   );
 }
+function encodeResult(result: Result): pb.Result {
+  return pipe(
+    result,
+    R.reduceRightWithIndex(new pb.Result(), (k, a, b) => {
+      b.getResultMap().set(k, encodeMeasurementTable(a));
+      return b;
+    })
+  );
+}
 class GRPCServer implements proto.IGreeterServer {
-  benchmark: grpc.handleUnaryCall<pb.BenchmarkInfo, pb.Void> = (x, y) => {
+  benchmark: grpc.handleUnaryCall<pb.BenchmarkInfo, pb.Result> = (x, y) => {
     var libURL: URL;
     var zrestURLs: URL[];
     try {
@@ -39,11 +48,8 @@ class GRPCServer implements proto.IGreeterServer {
       y({ name: "cannot parse url", message: x.request.getLiburl() }, null);
       throw error;
     }
-    y(null, new pb.Void());
 
-    benchmark(libURL, zrestURLs).then(result => {
-      console.log("benchmarking complete", result);
-    })
+    benchmark(libURL, zrestURLs).then((result) => y(null, encodeResult(result)));
   };
 }
 
