@@ -5,6 +5,11 @@ import * as R from "fp-ts/Record";
 import { pipe } from "fp-ts/lib/function";
 import { Measurement, Result, benchmark } from "zrest-benchmarker";
 import { URL } from "url";
+import * as E from "fp-ts/Either";
+import {Either} from "fp-ts/Either";
+import * as T from "fp-ts/Tuple";
+import * as A from "fp-ts/Array";
+import {tupled} from "fp-ts/function";
 
 function encodeMeasurement(m: Measurement): pb.Measurement {
   const out = new pb.Measurement();
@@ -30,28 +35,40 @@ function encodeResult(result: Result): pb.Result {
     })
   );
 }
+function toURL(str:string):E.Either<string, URL> {
+  try {
+    return E.right(new URL(str));
+  } catch (error) {
+    return E.left("failed to parse url: " + str);
+  }
+}
+function biSequence<E,A,B>(x:Either<E,A>, y:Either<E,B>):Either<E,[A,B]> {
+  const aa = T.sequence(E.either)([x,y])
+  const bb = pipe(aa, E.map(T.swap));
+  const cc = pipe(bb, E.map(T.sequence(E.either)));
+  const dd = E.flatten(cc);
+  const ee = pipe(dd, E.map(T.swap));
+  return ee;
+}
 class GRPCServer implements proto.IGreeterServer {
   benchmark: grpc.handleUnaryCall<pb.BenchmarkInfo, pb.Result> = (x, y) => {
-    var libURL: URL;
-    var zrestURLs: URL[];
     try {
-      libURL = new URL(x.request.getLiburl());
-      zrestURLs = x.request.getModelurlsList().map((x) => {
-        try {
-          return new URL(x);
-        } catch (error) {
-          y({ name: "cannot parse url", message: x }, null);
-          throw error;
-        }
-      });
+      const maybeLibURL = toURL(x.request.getLiburl());
+      const maybeZrestURLs = A.sequence(E.either)(x.request.getModelurlsList().map(toURL));
+      const maybeTuple = biSequence(maybeLibURL, maybeZrestURLs);
+      const final = pipe(maybeTuple, E.map(tupled(benchmark)));
+      pipe(final, E.fold(
+        reason => y({name: "Failed to parse url", message: reason}, null),
+        resultTask => {
+          resultTask
+            .then(encodeResult)
+            .then(result => y(null,result))
+            .catch((err)=>y(err, null));
+        },
+      ));  
     } catch (error) {
-      y({ name: "cannot parse url", message: x.request.getLiburl() }, null);
-      throw error;
+      y(error, null);
     }
-    console.log(libURL, zrestURLs)
-    benchmark(libURL, zrestURLs)
-      .then((result) => y(null, encodeResult(result)))
-      .catch((err)=>{y(err, null)})
   };
 }
 

@@ -56,15 +56,41 @@ test("test", (done) => {
     })
 }, 1000 * 60)
 
-
+const badZrests = [
+    "https://zrest-free-sample.s3.ap-northeast-2.amazonaws.com/7438d-o.dudu8u.zrest",
+    "https://tttttttttt/aoceuhoceuhco.zrest",
+    "https://zrest-free-sample.s3.ap-northeast-2.amazonaws.com/oos-chichuci-cuu.zrest",
+]
 test("test2", (done) => {
-    const badLib = "https://viewer-library.s3.ap-northeast-2.amazonaws.com/bad.closet.viewer.js";
     const x = new BenchmarkInfo();
-    x.setLiburl(badLib);
+    x.setLiburl("bad link");
     x.setModelurlsList(sampleZrests);
     client.benchmark(x, (err,rsp)=>{
-        console.log({err,rsp});
+        console.log("first time",{err,rsp});
         expect(err).toBeTruthy();
-        done();
+
+        setTimeout(() => {
+            const x = new BenchmarkInfo();
+            x.setLiburl("https://viewer-library.s3.ap-northeast-2.amazonaws.com/bad.closet.viewer.js");
+            x.setModelurlsList(sampleZrests);
+
+            client.benchmark(x, (err,rsp) => {
+                console.log("second time", {err,rsp});
+                expect(err).toBeTruthy();
+                expect(err!.code).not.toEqual(grpc.status.UNAVAILABLE);
+                
+                setTimeout(() => {
+                    const x = new BenchmarkInfo();
+                    x.setLiburl("https://viewer-library.s3.ap-northeast-2.amazonaws.com/closet.viewer.js");
+                    x.setModelurlsList(badZrests);
+        
+                    client.benchmark(x, (err,rsp) => {
+                        console.log("third time", {err,rsp});
+                        expect(err).toBeTruthy();
+                        done();
+                    });
+                }, 1000);
+            });
+        }, 1000);
     })
 }, 1000 * 60)
